@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Modder Tools</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_files">Files</string>
+    <string name="nav_info">App Info</string>
+    <string name="offline_title">You\'re offline</string>
+    <string name="offline_body">Modder Tools needs an internet connection to load tools, files and updates.</string>
+    <string name="retry">Retry</string>
+</resources>

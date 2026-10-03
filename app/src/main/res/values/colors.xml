@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#ACE32E</color>
+    <color name="accent_ink">#3F5C02</color>
+    <color name="ink">#000000</color>
+    <color name="ink_soft">#9E000000</color>
+    <color name="bg">#FFFFFF</color>
+    <color name="nav_glass_bg">#CCFFFFFF</color>
+    <color name="nav_glass_border">#1A000000</color>
+    <color name="nav_icon_inactive">#8A000000</color>
+    <color name="splash_bg">#FFFFFF</color>
+</resources>

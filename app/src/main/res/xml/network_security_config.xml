@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Default system trust store, HTTPS-only. The app loads its UI from local
+  assets (file:///android_asset/www/) and talks to Firebase + Google Fonts
+  over HTTPS from inside the WebView, so no cleartext exception is needed.
+  If you later point the WebView at a remote https domain instead of the
+  bundled assets, nothing here needs to change.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

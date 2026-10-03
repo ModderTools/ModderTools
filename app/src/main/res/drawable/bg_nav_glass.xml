@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  "Glass" bottom nav bar: a translucent white rounded pill with a hairline
+  border. True Gaussian blur-behind-content requires API 31 RenderEffect or
+  an extra blur library; this keeps the build dependency-free while still
+  reading as frosted glass thanks to the translucency + elevation in
+  activity_main.xml.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nav_glass_bg" />
+            <corners android:radius="32dp" />
+            <stroke android:width="1dp" android:color="@color/nav_glass_border" />
+        </shape>
+    </item>
+</layer-list>

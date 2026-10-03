@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modder Tools — Find the tools you need</title>
+<meta name="description" content="A centralized directory of apps and tools for Android modders: APK editors, reverse-engineering utilities, resource editors and more.">
+<meta property="og:title" content="Modder Tools">
+<meta property="og:description" content="A centralized place where modders can find the tools they need.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Modder Tools">
+<meta property="og:image" content="favicon.ico">
+<meta property="og:url" content="https://moddertools.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Modder Tools">
+<meta name="twitter:description" content="A centralized directory of apps and tools for Android modders.">
+<meta name="twitter:image" content="favicon.ico">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="favicon.ico" type="image/ico">
+<link rel="apple-touch-icon" href="favicon.ico">
+<link rel="canonical" id="canonicalLink" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script id="ldjson" type="application/ld+json">{}</script>
+<style>
+/* ==========================================================================
+   CONFIGURATION / DESIGN TOKENS
+   ========================================================================== */
+:root{
+  --bg:#FFFFFF;
+  --ink:#000000;
+  --ink-soft:rgba(0,0,0,.62);
+  --ink-faint:rgba(0,0,0,.38);
+  --line:rgba(0,0,0,.12);
+  --line-soft:rgba(0,0,0,.07);
+  --accent:#ACE32E;
+  --accent-ink:#3f5c02;
+  --surface:#FAFAF9;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+  --shadow-md:0 8px 24px rgba(0,0,0,.09);
+  --shadow-lg:0 20px 48px rgba(0,0,0,.16);
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:22px;
+  --font-display:'Space Grotesk', system-ui, sans-serif;
+  --font-body:'Inter', system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.22,.8,.28,1);
+  --header-h:68px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%; display:block;}
+a{color:inherit; text-decoration:none;}
+button{font:inherit; cursor:pointer;}
+h1,h2,h3{font-family:var(--font-display); margin:0; letter-spacing:-.01em;}
+.mono{font-family:var(--font-mono);}
+.visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;}
+:focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+
+.wrap{max-width:1240px; margin:0 auto; padding:0 20px;}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.site-header{
+  position:sticky; top:0; z-index:40; background:rgba(255,255,255,.86);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.header-row{
+  display:flex; align-items:center; gap:20px; height:var(--header-h);
+}
+.logo{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.logo img{height:30px; width:auto;}
+.logo-fallback{
+  font-family:var(--font-display); font-weight:700; font-size:19px;
+}
+.logo-fallback .dot{color:var(--accent-ink); background:var(--accent); padding:0 4px; border-radius:4px;}
+
+.search-shell{flex:1; position:relative; max-width:640px;}
+.search-shell input{
+  width:100%; height:44px; border:1.5px solid var(--line); border-radius:12px;
+  padding:0 44px 0 42px; font-size:14.5px; font-family:var(--font-body);
+  background:var(--surface); color:var(--ink); transition:border-color .15s var(--ease), background .15s var(--ease);
+}
+.search-shell input:focus{border-color:var(--accent); background:#fff;}
+.search-shell input::placeholder{color:var(--ink-faint);}
+.search-icon{position:absolute; left:14px; top:50%; transform:translateY(-50%); pointer-events:none; opacity:.55;}
+.search-clear{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  width:28px; height:28px; border-radius:8px; border:none; background:transparent;
+  display:none; align-items:center; justify-content:center; color:var(--ink-soft);
+}
+.search-clear.show{display:flex;}
+.search-clear:hover{background:var(--line-soft);}
+
+/* ==========================================================================
+   CATEGORY CHIPS
+   ========================================================================== */
+.categories{padding:18px 0 6px; overflow-x:auto; scrollbar-width:none;}
+.categories::-webkit-scrollbar{display:none;}
+.chip-row{display:flex; gap:10px; padding-bottom:2px;}
+.chip{
+  flex-shrink:0; padding:9px 16px; border-radius:999px; border:1.5px solid var(--line);
+  background:#fff; font-size:13.5px; font-weight:500; color:var(--ink-soft);
+  box-shadow:var(--shadow-sm); transition:border-color .15s var(--ease), color .15s var(--ease), transform .12s var(--ease);
+  white-space:nowrap;
+}
+.chip:hover{border-color:var(--accent); color:var(--ink); transform:translateY(-1px);}
+.chip.active{background:var(--ink); border-color:var(--ink); color:#fff;}
+.chip.active:hover{transform:none;}
+
+/* ==========================================================================
+   BANNER SLIDER
+   ========================================================================== */
+.banner-section{padding:18px 0 8px;}
+.banner{
+  position:relative; border-radius:var(--radius-lg); overflow:hidden;
+  aspect-ratio:2.7/1; background:var(--surface); box-shadow:var(--shadow-md);
+  border:1px solid var(--line-soft);
+}
+.banner-track{display:flex; height:100%; transition:transform .5s var(--ease);}
+.banner-slide{min-width:100%; height:100%; position:relative;}
+.banner-slide img{width:100%; height:100%; object-fit:cover;}
+.banner-slide .b-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(0deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%);
+}
+.banner-slide .b-cta{
+  position:absolute; right:18px; bottom:18px;
+  background:var(--accent); color:var(--accent-ink); font-weight:600; font-size:14px;
+  padding:11px 20px; border-radius:12px; box-shadow:var(--shadow-md);
+  border:none; transition:transform .15s var(--ease);
+}
+.banner-slide .b-cta:hover{transform:translateY(-2px);}
+.banner-slide .b-text{position:absolute; left:22px; bottom:20px; color:#fff; max-width:60%;}
+.banner-slide .b-text .b-title{font-family:var(--font-display); font-weight:600; font-size:clamp(16px,2.4vw,26px);}
+.banner-slide .b-text .b-sub{font-size:13px; opacity:.85; margin-top:4px;}
+.banner-nav{
+  position:absolute; top:50%; transform:translateY(-50%); width:36px; height:36px;
+  border-radius:50%; background:rgba(255,255,255,.85); backdrop-filter:blur(4px);
+  border:none; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm);
+  opacity:0; transition:opacity .15s var(--ease);
+}
+.banner:hover .banner-nav{opacity:1;}
+.banner-nav.prev{left:14px;} .banner-nav.next{right:14px;}
+.banner-dots{position:absolute; left:22px; bottom:70px; display:flex; gap:6px;}
+.banner-dots span{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.5); transition:background .2s, width .2s;}
+.banner-dots span.active{background:#fff; width:16px; border-radius:4px;}
+.banner-empty{
+  display:flex; align-items:center; justify-content:center; height:100%;
+  color:var(--ink-faint); font-size:13px;
+}
+
+/* ==========================================================================
+   APP GRID
+   ========================================================================== */
+.grid-section{padding:26px 0 40px;}
+.grid-heading{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;}
+.grid-heading h2{font-size:19px; font-weight:600;}
+.grid-heading .count{font-size:12.5px; color:var(--ink-faint); font-family:var(--font-mono);}
+
+.app-grid{
+  display:grid; gap:10px;
+  grid-template-columns:repeat(3, 1fr);
+}
+@media (min-width:640px){ .app-grid{grid-template-columns:repeat(5,1fr); gap:12px;} }
+@media (min-width:900px){ .app-grid{grid-template-columns:repeat(6,1fr);} }
+@media (min-width:1120px){ .app-grid{grid-template-columns:repeat(8,1fr);} }
+
+.app-card{
+  background:#fff; border:1px solid var(--line-soft); border-radius:var(--radius-md);
+  padding:9px; box-shadow:var(--shadow-sm); transition:transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
+  display:flex; flex-direction:column; gap:7px; min-width:0;
+}
+.app-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:var(--line);}
+.app-card .thumb{
+  aspect-ratio:1/1; width:100%; border-radius:12px; overflow:hidden; background:var(--surface);
+  border:1px solid var(--line-soft); position:relative;
+}
+.app-card .thumb img{width:100%; height:100%; object-fit:cover; aspect-ratio:1/1;}
+.app-card .name{font-size:12.3px; font-weight:600; line-height:1.28; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-break:break-word;}
+.app-card .meta{font-size:10px; color:var(--ink-faint); font-family:var(--font-mono); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+@media (max-width:380px){
+  .app-card{padding:7px; border-radius:12px; gap:6px;}
+  .app-card .thumb{border-radius:10px;}
+  .app-card .name{font-size:11.5px;}
+  .app-card .meta{font-size:9.5px;}
+}
+
+.grid-skeleton{background:linear-gradient(100deg, var(--surface) 30%, #f0efec 45%, var(--surface) 60%); background-size:200% 100%; animation:shimmer 1.4s infinite;}
+@keyframes shimmer{0%{background-position:150% 0;} 100%{background-position:-50% 0;}}
+.skeleton-card{border-radius:var(--radius-md); aspect-ratio:.82/1;}
+
+.sentinel{height:1px;}
+.load-more-state{display:flex; justify-content:center; padding:26px 0; color:var(--ink-faint); font-size:13px;}
+.spinner{width:18px; height:18px; border-radius:50%; border:2.5px solid var(--line); border-top-color:var(--accent); animation:spin .7s linear infinite; margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.empty-state{
+  text-align:center; padding:70px 20px; color:var(--ink-soft);
+}
+.empty-state .e-title{font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--ink); margin-bottom:6px;}
+.empty-state .e-sub{font-size:13.5px; color:var(--ink-faint);}
+
+/* ==========================================================================
+   VIEW ROUTING
+   ========================================================================== */
+.view{display:none;}
+.view.active{display:block; animation:fadein .25s var(--ease);}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+/* ==========================================================================
+   APP DETAILS
+   ========================================================================== */
+.details-shell{padding-bottom:60px;}
+.cover-wrap{
+  border-radius:var(--radius-lg); overflow:hidden; aspect-ratio:2.7/1; margin-top:18px;
+  box-shadow:var(--shadow-md); border:1px solid var(--line-soft); background:var(--surface);
+}
+.cover-wrap img{width:100%; height:100%; object-fit:cover;}
+
+.identity-row{
+  display:flex; align-items:center; gap:16px; margin-top:-38px; position:relative; z-index:2;
+  padding:0 4px;
+}
+.identity-logo{
+  width:80px; height:80px; border-radius:18px; border:3px solid #fff; box-shadow:var(--shadow-md);
+  background:var(--surface); overflow:hidden; flex-shrink:0;
+}
+.identity-logo img{width:100%; height:100%; object-fit:cover;}
+.identity-main{flex:1; min-width:0; padding-top:38px;}
+.identity-main h1{font-size:clamp(19px,3vw,26px); font-weight:700;}
+.identity-main .pkg{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-faint); margin-top:3px;}
+.btn-download{
+  align-self:flex-end; margin-bottom:2px; flex-shrink:0;
+  background:var(--ink); color:#fff; font-weight:600; font-size:14px;
+  padding:13px 22px; border-radius:14px; box-shadow:var(--shadow-md); border:none;
+  display:flex; align-items:center; gap:8px; transition:transform .15s var(--ease), background .15s;
+}
+.btn-download:hover{transform:translateY(-2px); background:#171717;}
+.btn-download svg{flex-shrink:0;}
+
+.stat-blocks{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:22px;}
+.stat-block{
+  border:1px solid var(--line-soft); border-radius:var(--radius-sm); padding:14px 16px;
+  display:flex; align-items:center; gap:11px; background:var(--surface);
+}
+.stat-block .s-icon{
+  width:36px; height:36px; border-radius:10px; background:rgba(172,227,46,.18);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--accent-ink);
+}
+.stat-block .s-value{font-weight:700; font-size:14.5px; font-family:var(--font-mono);}
+.stat-block .s-label{font-size:11px; color:var(--ink-faint); margin-top:1px;}
+
+.dl-share-row{
+  display:flex; align-items:center; justify-content:space-between; margin-top:16px;
+  padding:14px 18px; border:1px solid var(--line-soft); border-radius:var(--radius-sm); background:#fff;
+}
+.dl-count{display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--ink-soft);}
+.dl-count strong{color:var(--ink); font-family:var(--font-mono);}
+.share-btn{
+  display:flex; align-items:center; gap:7px; border:1.5px solid var(--line); border-radius:10px;
+  padding:8px 14px; font-size:13px; font-weight:500; background:#fff; transition:border-color .15s;
+}
+.share-btn:hover{border-color:var(--accent);}
+
+.section-block{margin-top:34px;}
+.section-block h2{font-size:16px; font-weight:600; margin-bottom:12px;}
+
+.gallery-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px;}
+.gallery-grid img{
+  width:100%; aspect-ratio:9/16; object-fit:cover; border-radius:var(--radius-sm);
+  border:1px solid var(--line-soft); box-shadow:var(--shadow-sm); cursor:zoom-in;
+  transition:transform .18s var(--ease);
+}
+.gallery-grid img:hover{transform:scale(1.02);}
+
+.info-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:var(--radius-sm); overflow:hidden;}
+.info-item{background:#fff; padding:14px 16px;}
+.info-item .i-label{font-size:11px; color:var(--ink-faint); margin-bottom:4px;}
+.info-item .i-value{font-weight:600; font-size:13.5px;}
+
+.desc-body{font-size:14.5px; line-height:1.7; color:var(--ink-soft); max-width:74ch;}
+.desc-body p{margin:0 0 12px;}
+
+.perm-grid{display:flex; flex-wrap:wrap; gap:8px;}
+.perm-chip{
+  border:1px solid var(--line); border-radius:999px; padding:7px 14px; font-size:12.5px;
+  display:flex; align-items:center; gap:7px; background:var(--surface);
+}
+.perm-chip::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--accent);}
+
+.addl-row{display:flex; flex-wrap:wrap; gap:10px;}
+.addl-pill{border:1px solid var(--line-soft); border-radius:10px; padding:10px 14px; font-size:12.5px; background:#fff; min-width:120px;}
+.addl-pill .p-label{color:var(--ink-faint); font-size:10.5px; margin-bottom:3px;}
+.addl-pill .p-value{font-weight:600;}
+
+.contact-row, .social-row{display:flex; flex-wrap:wrap; gap:10px;}
+.contact-chip, .social-icon{
+  display:flex; align-items:center; gap:8px; border:1px solid var(--line-soft); border-radius:10px;
+  padding:9px 14px; font-size:12.5px; background:#fff; transition:border-color .15s, transform .15s;
+}
+.social-icon{width:42px; height:42px; padding:0; justify-content:center; border-radius:12px;}
+.contact-chip:hover, .social-icon:hover{border-color:var(--accent); transform:translateY(-2px);}
+
+/* Mobile-only layout fixes for the App Details page — desktop rules above are untouched */
+@media (max-width:640px){
+  .details-shell{padding-bottom:40px;}
+  .cover-wrap{aspect-ratio:16/9; margin-top:14px; border-radius:var(--radius-md);}
+  .identity-row{flex-wrap:wrap; margin-top:-30px; gap:10px 12px; padding:0 2px;}
+  .identity-logo{width:64px; height:64px; border-radius:15px; border-width:2.5px;}
+  .identity-main{padding-top:26px; flex:1 1 auto;}
+  .identity-main h1{font-size:18px; line-height:1.25;}
+  .identity-main .pkg{font-size:10.5px; word-break:break-all;}
+  .btn-download{flex:1 1 100%; order:3; justify-content:center; margin-top:2px; padding:12px 18px; align-self:auto;}
+
+  .stat-blocks{grid-template-columns:repeat(3,1fr); gap:8px; margin-top:16px;}
+  .stat-block{flex-direction:column; align-items:flex-start; padding:11px 10px; gap:6px;}
+  .stat-block .s-icon{width:30px; height:30px;}
+  .stat-block .s-value{font-size:12px; word-break:break-word;}
+  .stat-block .s-label{font-size:9.5px;}
+
+  .dl-share-row{flex-wrap:wrap; gap:10px; padding:12px 14px;}
+  .dl-count{font-size:12.5px;}
+
+  .section-block{margin-top:26px;}
+  .section-block h2{font-size:15px;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr); gap:8px;}
+  .info-list{grid-template-columns:repeat(2,1fr);}
+  .addl-pill{min-width:0; flex:1 1 45%;}
+}
+
+/* ==========================================================================
+   SHARE OVERLAY / LIGHTBOX (shared modal shell)
+   ========================================================================== */
+.overlay-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(2px);
+  z-index:80; display:none; align-items:flex-end; justify-content:center;
+  opacity:0; transition:opacity .2s var(--ease);
+}
+.overlay-backdrop.show{display:flex; opacity:1;}
+@media (min-width:640px){ .overlay-backdrop{align-items:center;} }
+.overlay-card{
+  background:#fff; border-radius:20px 20px 0 0; width:100%; max-width:420px; padding:22px;
+  box-shadow:var(--shadow-lg); transform:translateY(24px); transition:transform .25s var(--ease);
+}
+.overlay-backdrop.show .overlay-card{transform:translateY(0);}
+@media (min-width:640px){ .overlay-card{border-radius:20px;} }
+.overlay-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+.overlay-head h3{font-size:16px; font-weight:600;}
+.overlay-close{width:32px; height:32px; border-radius:9px; border:none; background:var(--surface); display:flex; align-items:center; justify-content:center;}
+.overlay-close:hover{background:var(--line-soft);}
+.share-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+.share-opt{
+  display:flex; flex-direction:column; align-items:center; gap:7px; padding:12px 4px; border-radius:12px;
+  border:1px solid var(--line-soft); font-size:11px; color:var(--ink-soft); transition:border-color .15s, transform .15s;
+}
+.share-opt:hover{border-color:var(--accent); transform:translateY(-2px);}
+.share-opt .ic{width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff;}
+.copy-row{display:flex; gap:8px; margin-top:16px;}
+.copy-row input{flex:1; height:40px; border:1.5px solid var(--line); border-radius:10px; padding:0 12px; font-size:12.5px; background:var(--surface);}
+.copy-row button{background:var(--ink); color:#fff; border:none; border-radius:10px; padding:0 16px; font-size:12.5px; font-weight:600;}
+
+.lightbox-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:90; display:none;
+  align-items:center; justify-content:center; opacity:0; transition:opacity .2s;
+}
+.lightbox-backdrop.show{display:flex; opacity:1;}
+.lightbox-backdrop img{max-width:90vw; max-height:85vh; border-radius:10px;}
+.lightbox-close{position:absolute; top:18px; right:18px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.15); border:none; color:#fff; display:flex; align-items:center; justify-content:center;}
+
+/* ==========================================================================
+   DOWNLOAD PAGE
+   ========================================================================== */
+.dlpage{max-width:480px; margin:60px auto 80px; text-align:center; padding:0 20px;}
+.dlpage .d-icon{width:88px; height:88px; border-radius:22px; margin:0 auto 18px; box-shadow:var(--shadow-md); overflow:hidden; border:1px solid var(--line-soft);}
+.dlpage .d-icon img{width:100%; height:100%; object-fit:cover;}
+.dlpage h1{font-size:21px; font-weight:700;}
+.dlpage .d-version{font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); margin-top:4px;}
+.dlpage .d-desc{font-size:13.5px; color:var(--ink-soft); margin-top:12px; line-height:1.6;}
+
+.countdown-wrap{margin-top:34px;}
+.countdown-ring{width:120px; height:120px; margin:0 auto; position:relative;}
+.countdown-ring svg{transform:rotate(-90deg);}
+.countdown-ring .track{fill:none; stroke:var(--line-soft); stroke-width:6;}
+.countdown-ring .fill{fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 1s linear;}
+.countdown-num{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:30px; font-weight:600;}
+.countdown-label{font-size:12.5px; color:var(--ink-faint); margin-top:14px;}
+
+.btn-download-final{
+  margin-top:30px; width:100%; padding:16px; border-radius:14px; border:none; font-size:15px; font-weight:700;
+  background:var(--line-soft); color:var(--ink-faint); pointer-events:none; transition:background .3s, color .3s, transform .15s;
+  display:flex; align-items:center; justify-content:center; gap:9px;
+}
+.btn-download-final.ready{background:var(--accent); color:var(--accent-ink); pointer-events:auto; box-shadow:var(--shadow-md);}
+.btn-download-final.ready:hover{transform:translateY(-2px);}
+.dl-back{display:inline-block; margin-top:22px; font-size:13px; color:var(--ink-faint);}
+.dl-back:hover{color:var(--ink);}
+
+/* ==========================================================================
+   FOOTER / MISC
+   ========================================================================== */
+.site-footer{border-top:1px solid var(--line-soft); padding:30px 0; margin-top:20px;}
+.site-footer .wrap{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+.site-footer p{font-size:12px; color:var(--ink-faint); margin:0;}
+
+.conn-banner{
+  position:fixed; left:50%; bottom:20px; transform:translate(-50%, 120%); z-index:100;
+  background:var(--ink); color:#fff; padding:12px 18px; border-radius:12px; font-size:13px;
+  box-shadow:var(--shadow-lg); transition:transform .3s var(--ease); display:flex; align-items:center; gap:9px;
+}
+.conn-banner.show{transform:translate(-50%,0);}
+
+.back-link{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft); margin-top:18px;}
+.back-link:hover{color:var(--ink);}
+
+/* ==========================================================================
+   SEARCH PAGE / APP INFO PAGE / "in the native app" spacing
+   ========================================================================== */
+.search-page-head{padding:26px 0 6px; text-align:center;}
+.search-page-title{font-size:22px; font-weight:700;}
+.search-page-sub{font-size:13.5px; color:var(--ink-faint); margin:6px 0 18px;}
+.search-shell--page{max-width:520px; margin:0 auto;}
+
+.app-info-shell{padding:26px 0 50px; max-width:640px;}
+.info-card{
+  background:#fff; border:1px solid var(--line-soft); border-radius:var(--radius-lg);
+  padding:24px; box-shadow:var(--shadow-sm); margin-bottom:16px; text-align:left;
+}
+.info-card--app{text-align:center;}
+.info-card-logo{width:64px; height:64px; margin:0 auto 14px; border-radius:16px; overflow:hidden; box-shadow:var(--shadow-sm); border:1px solid var(--line-soft);}
+.info-card-logo img{width:100%; height:100%; object-fit:cover;}
+.info-card--app h2{font-size:20px; font-weight:700;}
+.info-version{font-size:12px; color:var(--ink-faint); margin-top:4px;}
+.info-tagline{font-size:13.5px; color:var(--ink-soft); margin:10px 0 18px;}
+.info-card h3{font-size:15px; font-weight:600; margin-bottom:10px;}
+.info-links-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; justify-content:inherit;}
+.info-card--app .info-links-row{justify-content:center;}
+.info-link-btn{
+  border:1.5px solid var(--line); border-radius:10px; padding:9px 16px; font-size:12.5px; font-weight:600;
+  background:var(--surface); transition:border-color .15s, transform .15s;
+}
+.info-link-btn:hover{border-color:var(--accent); transform:translateY(-2px);}
+
+/* Extra bottom clearance for the native app's floating glass nav bar —
+   applied only when running inside the Android shell (see the init script),
+   so the public website is completely unaffected. */
+body.in-app .site-footer{display:none;}
+body.in-app .details-shell, body.in-app .grid-section, body.in-app .dlpage, body.in-app .app-info-shell{padding-bottom:96px;}
+</style>
+</head>
+<body>
+
+<!-- ============================== HEADER ============================== -->
+<header class="site-header">
+  <div class="wrap header-row">
+    <a href="#/home" class="logo" data-route="home" aria-label="Modder Tools home">
+      <img src="favicon.ico" alt="Modder Tools" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <span class="logo-fallback" style="display:none;">Modder<span class="dot">Tools</span></span>
+    </a>
+    <div class="search-shell">
+      <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="search" placeholder="Search apps, tools, keywords…" aria-label="Search tools">
+      <button class="search-clear" id="searchClear" aria-label="Clear search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============================== HOME VIEW ============================== -->
+  <section id="view-home" class="view active">
+    <div class="wrap">
+      <h1 class="visually-hidden">Modder Tools — Directory of Android Modding Apps &amp; Tools</h1>
+      <nav class="categories" aria-label="Categories">
+        <div class="chip-row" id="chipRow">
+          <button class="chip active" data-cat="">All</button>
+        </div>
+      </nav>
+
+      <div class="banner-section" id="bannerSection">
+        <div class="banner" id="banner">
+          <div class="banner-track" id="bannerTrack"></div>
+          <button class="banner-nav prev" id="bannerPrev" aria-label="Previous banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="banner-nav next" id="bannerNext" aria-label="Next banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid-section">
+        <div class="grid-heading">
+          <h2 id="gridTitle">All tools</h2>
+          <span class="count" id="gridCount"></span>
+        </div>
+        <div class="app-grid" id="appGrid"></div>
+        <div class="sentinel" id="sentinel"></div>
+        <div class="load-more-state" id="loadMoreState" style="display:none;"><span class="spinner"></span> Loading more tools…</div>
+        <div class="empty-state" id="emptyState" style="display:none;">
+          <div class="e-title">No matching tools found.</div>
+          <div class="e-sub">Try a different keyword or category.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== APP DETAILS VIEW ============================== -->
+  <section id="view-details" class="view">
+    <div class="wrap details-shell" id="detailsShell"></div>
+  </section>
+
+  <!-- ============================== DOWNLOAD VIEW ============================== -->
+  <section id="view-download" class="view">
+    <div class="dlpage" id="downloadShell"></div>
+  </section>
+
+  <!-- ============================== FILE DETAILS VIEW ============================== -->
+  <section id="view-file-details" class="view">
+    <div class="wrap details-shell" id="fileDetailsShell"></div>
+  </section>
+
+  <!-- ============================== FILE DOWNLOAD VIEW ============================== -->
+  <section id="view-file-download" class="view">
+    <div class="dlpage" id="fileDownloadShell"></div>
+  </section>
+
+  <!-- ============================== FILES VIEW ============================== -->
+  <section id="view-files" class="view">
+    <div class="wrap">
+      <h1 class="visually-hidden">Modder Tools — Files</h1>
+      <nav class="categories" aria-label="File categories">
+        <div class="chip-row" id="filesChipRow">
+          <button class="chip active" data-cat="">All</button>
+        </div>
+      </nav>
+      <div class="grid-section">
+        <div class="grid-heading">
+          <h2 id="filesGridTitle">All files</h2>
+          <span class="count" id="filesGridCount"></span>
+        </div>
+        <div class="app-grid" id="filesGrid"></div>
+        <div class="sentinel" id="filesSentinel"></div>
+        <div class="load-more-state" id="filesLoadMoreState" style="display:none;"><span class="spinner"></span> Loading more files…</div>
+        <div class="empty-state" id="filesEmptyState" style="display:none;">
+          <div class="e-title">No files available yet.</div>
+          <div class="e-sub">Check back soon.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== SEARCH VIEW ============================== -->
+  <section id="view-search" class="view">
+    <div class="wrap">
+      <h1 class="visually-hidden">Modder Tools — Search</h1>
+      <div class="search-page-head">
+        <h2 class="search-page-title">Search everything</h2>
+        <p class="search-page-sub">Search across every tool and file in one place.</p>
+        <div class="search-shell search-shell--page">
+          <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="globalSearchInput" type="search" placeholder="Search tools, files, keywords…" aria-label="Search tools and files">
+        </div>
+      </div>
+      <div class="grid-section">
+        <div class="grid-heading">
+          <h2 id="searchResultsTitle">Start typing to search</h2>
+          <span class="count" id="searchResultsCount"></span>
+        </div>
+        <div class="app-grid" id="searchGrid"></div>
+        <div class="empty-state" id="searchEmptyState" style="display:none;">
+          <div class="e-title">No matching results.</div>
+          <div class="e-sub">Try a different keyword.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== APP INFO VIEW ============================== -->
+  <section id="view-app-info" class="view">
+    <div class="wrap app-info-shell">
+      <h1 class="visually-hidden">Modder Tools — App Info</h1>
+      <div class="info-card info-card--app">
+        <div class="info-card-logo"><img src="https://i.ibb.co/bRQJZs5y/1000150089.png" alt="Modder Tools" onerror="this.style.display='none'"></div>
+        <h2>Modder Tools</h2>
+        <div class="mono info-version" id="appInfoVersion">Version 1.0.0</div>
+        <p class="info-tagline">A centralized place where modders can find the tools they need.</p>
+        <div class="info-links-row">
+          <a class="info-link-btn" href="https://moddertools.vercel.app/" target="_blank" rel="noopener">Website</a>
+          <a class="info-link-btn" href="https://t.me/ModderTools" target="_blank" rel="noopener">Telegram</a>
+          <a class="info-link-btn" href="https://github.com/ModderTools" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>About the developer</h3>
+        <p class="desc-body" style="max-width:none;">
+          Sh. Tanzir is a developer, editor, and prompt engineer focused on building modern web and Android applications, developer tools, and AI-powered projects.
+          He works with technologies such as HTML, CSS, JavaScript, Java, Kotlin, Flutter, Firebase, and AI APIs, with a strong interest in Android development,
+          app customization, UI/UX design, automation, and creative digital solutions. He enjoys turning ideas into practical, polished, and user-friendly
+          applications while continuously exploring new technologies and development techniques.
+        </p>
+        <div class="info-links-row">
+          <a class="info-link-btn" href="https://github.com/ShTanzir" target="_blank" rel="noopener">GitHub</a>
+          <a class="info-link-btn" href="https://shtanzir.vercel.app/" target="_blank" rel="noopener">Website</a>
+          <a class="info-link-btn" href="https://t.me/Sh_Tanzir" target="_blank" rel="noopener">Telegram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© <span id="year"></span> Modder Tools — a directory built for Android modders.</p>
+    <p id="footerSiteNote"></p>
+  </div>
+</footer>
+
+<!-- ============================== SHARE OVERLAY ============================== -->
+<div class="overlay-backdrop" id="shareOverlay" role="dialog" aria-modal="true" aria-label="Share this tool">
+  <div class="overlay-card">
+    <div class="overlay-head">
+      <h3>Share this tool</h3>
+      <button class="overlay-close" id="shareClose" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="share-grid" id="shareGrid"></div>
+    <div class="copy-row">
+      <input type="text" id="shareUrlInput" readonly>
+      <button id="shareCopyBtn">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== LIGHTBOX ============================== -->
+<div class="lightbox-backdrop" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="Screenshot preview">
+</div>
+
+<!-- ============================== CONNECTION BANNER ============================== -->
+<div class="conn-banner" id="connBanner">
+  <span class="spinner"></span><span id="connBannerText">Reconnecting…</span>
+</div>
+
+<!-- ============================== FIREBASE SDK ============================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+'use strict';
+
+/* ==========================================================================
+   1. CONFIGURATION
+   ========================================================================== */
+ const firebaseConfig = {
+  apiKey: "AIzaSyDWBFlmvdswKThEgvEQD6nRCjVd60Je0t0",
+  authDomain: "gen-lang-client-0038612233.firebaseapp.com",
+  databaseURL: "https://gen-lang-client-0038612233-default-rtdb.firebaseio.com",
+  projectId: "gen-lang-client-0038612233",
+  storageBucket: "gen-lang-client-0038612233.firebasestorage.app",
+  messagingSenderId: "692219421342",
+  appId: "1:692219421342:web:90be8f15e15e6a4a4e118f"
+};
+
+const CONFIG = {
+  PAGE_SIZE: 24,          // apps loaded per infinite-scroll batch
+  COUNTDOWN_SECONDS: 20,  // download-page countdown
+  PLACEHOLDER_IMG: 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23FAFAF9"/><text x="50%25" y="50%25" font-family="sans-serif" font-size="13" fill="%23bbb" text-anchor="middle" dy=".3em">No image</text></svg>'
+  )
+};
+
+/* ==========================================================================
+   2. FIREBASE INITIALIZATION
+   ========================================================================== */
+let db = null, firebaseReady = false;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  firebaseReady = true;
+  db.ref('.info/connected').on('value', snap => {
+    setConnBanner(snap.val() === false);
+  });
+} catch(e){
+  console.error('Firebase init failed — replace the firebaseConfig placeholder values.', e);
+}
+
+function setConnBanner(show){
+  const el = document.getElementById('connBanner');
+  document.getElementById('connBannerText').textContent = 'Reconnecting to the database…';
+  el.classList.toggle('show', !!show);
+}
+
+/* ==========================================================================
+   3. APPLICATION STATE
+   ========================================================================== */
+const State = {
+  route: 'home',           // 'home' | 'details' | 'download'
+  routeId: null,
+  categories: [],          // [{id,name,order}]
+  banners: [],             // active banners, ordered
+  bannerIndex: 0,
+  bannerTimer: null,
+  activeCategory: '',
+  searchTerm: '',
+  allApps: [],              // full published-app cache (loaded once; filtered/paginated client-side)
+  appsLoaded: false,
+  visibleCount: 0,
+  appById: {},
+  countdownTimer: null,
+
+  // Files tab — mirrors the apps state above but reads the /files node
+  allFiles: [],
+  filesLoaded: false,
+  filesVisibleCount: 0,
+  fileById: {},
+  filesActiveCategory: '',
+
+  // Search tab — combined apps + files
+  searchPageTerm: ''
+};
+const CONFIG_APP_VERSION = '1.0.0';
+
+/* ==========================================================================
+   4. ROUTING
+   ========================================================================== */
+function parseHash(){
+  const raw = location.hash.replace(/^#\/?/, '');
+  const [path, qs] = raw.split('?');
+  const params = new URLSearchParams(qs || '');
+  return { path: path || 'home', id: params.get('id') };
+}
+
+function navigate(hash){ location.hash = hash; }
+
+function renderRoute(){
+  const { path, id } = parseHash();
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  stopCountdown();
+
+  if(path === 'app-details' && id){
+    State.route = 'details'; State.routeId = id;
+    document.getElementById('view-details').classList.add('active');
+    renderAppDetails(id);
+  } else if(path === 'app-download' && id){
+    State.route = 'download'; State.routeId = id;
+    document.getElementById('view-download').classList.add('active');
+    renderDownloadPage(id);
+  } else if(path === 'file-details' && id){
+    State.route = 'file-details'; State.routeId = id;
+    document.getElementById('view-file-details').classList.add('active');
+    renderFileDetails(id);
+  } else if(path === 'file-download' && id){
+    State.route = 'file-download'; State.routeId = id;
+    document.getElementById('view-file-download').classList.add('active');
+    renderFileDownloadPage(id);
+  } else if(path === 'files'){
+    State.route = 'files'; State.routeId = null;
+    document.getElementById('view-files').classList.add('active');
+    renderFilesGrid(true);
+  } else if(path === 'search'){
+    State.route = 'search'; State.routeId = null;
+    document.getElementById('view-search').classList.add('active');
+    initSearchPage();
+  } else if(path === 'app-info'){
+    State.route = 'app-info'; State.routeId = null;
+    document.getElementById('view-app-info').classList.add('active');
+    document.getElementById('appInfoVersion').textContent = 'Version ' + CONFIG_APP_VERSION;
+  } else {
+    State.route = 'home'; State.routeId = null;
+    document.getElementById('view-home').classList.add('active');
+  }
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  updateSEO();
+}
+window.addEventListener('hashchange', renderRoute);
+
+/* ==========================================================================
+   5. DATA SERVICES
+   ========================================================================== */
+function loadCategories(){
+  if(!firebaseReady) return;
+  db.ref('categories').on('value', snap => {
+    const val = snap.val() || {};
+    State.categories = Object.entries(val)
+      .map(([id, c]) => ({ id, ...c }))
+      .sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+    renderChips();
+    renderFilesChips();
+  }, () => { renderChips(); renderFilesChips(); });
+}
+
+function loadBanners(){
+  if(!firebaseReady) return;
+  db.ref('banners').orderByChild('order').on('value', snap => {
+    const val = snap.val() || {};
+    State.banners = Object.entries(val)
+      .map(([id, b]) => ({ id, ...b }))
+      .filter(b => b.active)
+      .sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+    State.bannerIndex = 0;
+    renderBanners();
+  }, () => renderBanners());
+}
+
+function loadApps(){
+  if(!firebaseReady){ renderGrid(); return; }
+  db.ref('apps').orderByChild('status').equalTo('published').on('value', snap => {
+    const val = snap.val() || {};
+    State.allApps = Object.entries(val)
+      .map(([id, a]) => ({ id, ...a }))
+      .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+    State.appById = {}; State.allApps.forEach(a => State.appById[a.id] = a);
+    State.appsLoaded = true;
+    State.visibleCount = 0;
+    renderGrid(true);
+  }, () => { State.appsLoaded = true; renderGrid(true); });
+}
+
+function getApp(id){
+  return State.appById[id] || null;
+}
+
+// Files tab — same published/status model as apps, stored under /files.
+function loadFiles(){
+  if(!firebaseReady){ renderFilesGrid(true); return; }
+  db.ref('files').orderByChild('status').equalTo('published').on('value', snap => {
+    const val = snap.val() || {};
+    State.allFiles = Object.entries(val)
+      .map(([id, f]) => ({ id, ...f }))
+      .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+    State.fileById = {}; State.allFiles.forEach(f => State.fileById[f.id] = f);
+    State.filesLoaded = true;
+    State.filesVisibleCount = 0;
+    renderFilesGrid(true);
+  }, () => { State.filesLoaded = true; renderFilesGrid(true); });
+}
+function getFile(id){
+  return State.fileById[id] || null;
+}
+
+function incrementStat(idOrAppId, field, collection){
+  if(!firebaseReady || !idOrAppId) return;
+  const coll = collection || 'apps';
+  db.ref(`${coll}/${idOrAppId}/${field}`).transaction(cur => (cur || 0) + 1);
+}
+
+/* ==========================================================================
+   6. SEARCH + FILTER
+   ========================================================================== */
+function matchesCategory(item, cat){
+  if(!cat) return true;
+  const cats = item.categories;
+  return (cats && Object.values(cats).includes(cat)) || (Array.isArray(cats) && cats.includes(cat));
+}
+function matchesTerm(item, term){
+  if(!term) return true;
+  const hay = [
+    item.name, item.packageName,
+    Array.isArray(item.keywords) ? item.keywords.join(' ') : item.keywords,
+    Array.isArray(item.categories) ? item.categories.join(' ') : ''
+  ].filter(Boolean).join(' ').toLowerCase();
+  return hay.includes(term);
+}
+function filteredApps(){
+  const term = State.searchTerm.trim().toLowerCase();
+  const cat = State.activeCategory;
+  return State.allApps.filter(a => matchesCategory(a, cat) && matchesTerm(a, term));
+}
+function filteredFiles(){
+  const term = State.searchTerm.trim().toLowerCase();
+  const cat = State.filesActiveCategory;
+  return State.allFiles.filter(f => matchesCategory(f, cat) && matchesTerm(f, term));
+}
+function searchAllItems(term){
+  term = (term || '').trim().toLowerCase();
+  if(!term) return [];
+  const apps = State.allApps.filter(a => matchesTerm(a, term)).map(a => ({ item:a, kind:'app' }));
+  const files = State.allFiles.filter(f => matchesTerm(f, term)).map(f => ({ item:f, kind:'file' }));
+  return [...apps, ...files];
+}
+
+/* ==========================================================================
+   7. CATEGORY CHIPS
+   ========================================================================== */
+function renderChips(){
+  const row = document.getElementById('chipRow');
+  row.innerHTML = '';
+  const allChip = makeChip('All', '', State.activeCategory === '');
+  row.appendChild(allChip);
+  State.categories.forEach(c => {
+    row.appendChild(makeChip(c.name, c.id, State.activeCategory === c.id));
+  });
+}
+function makeChip(label, id, active){
+  const b = document.createElement('button');
+  b.className = 'chip' + (active ? ' active' : '');
+  b.textContent = label;
+  b.dataset.cat = id;
+  b.addEventListener('click', () => {
+    State.activeCategory = id;
+    State.visibleCount = 0;
+    renderChips();
+    renderGrid(true);
+    document.getElementById('gridTitle').textContent = label === 'All' ? 'All tools' : label;
+  });
+  return b;
+}
+
+// Files tab category chips — same taxonomy as tools, filtering /files instead.
+function renderFilesChips(){
+  const row = document.getElementById('filesChipRow');
+  if(!row) return;
+  row.innerHTML = '';
+  row.appendChild(makeFileChip('All', '', State.filesActiveCategory === ''));
+  State.categories.forEach(c => {
+    row.appendChild(makeFileChip(c.name, c.id, State.filesActiveCategory === c.id));
+  });
+}
+function makeFileChip(label, id, active){
+  const b = document.createElement('button');
+  b.className = 'chip' + (active ? ' active' : '');
+  b.textContent = label;
+  b.dataset.cat = id;
+  b.addEventListener('click', () => {
+    State.filesActiveCategory = id;
+    State.filesVisibleCount = 0;
+    renderFilesChips();
+    renderFilesGrid(true);
+    document.getElementById('filesGridTitle').textContent = label === 'All' ? 'All files' : label;
+  });
+  return b;
+}
+
+/* ==========================================================================
+   8. BANNER SYSTEM
+   ========================================================================== */
+function renderBanners(){
+  const track = document.getElementById('bannerTrack');
+  const section = document.getElementById('bannerSection');
+  clearInterval(State.bannerTimer);
+
+  if(!State.banners.length){
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  track.innerHTML = '';
+
+  State.banners.forEach(b => {
+    const slide = document.createElement('div');
+    slide.className = 'banner-slide';
+    slide.innerHTML = `
+      <img src="${escAttr(b.image || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(b.shortDetails || 'Banner')}" loading="lazy">
+      <div class="b-scrim"></div>
+      ${b.shortDetails ? `<div class="b-text"><div class="b-title">${esc(b.shortDetails)}</div></div>` : ''}
+      ${b.buttonText ? `<button class="b-cta">${esc(b.buttonText)}</button>` : ''}
+    `;
+    const cta = slide.querySelector('.b-cta');
+    if(cta) cta.addEventListener('click', () => handleBannerDestination(b));
+    track.appendChild(slide);
+  });
+
+  const dots = document.createElement('div');
+  dots.className = 'banner-dots';
+  dots.id = 'bannerDots';
+  State.banners.forEach((_, i) => {
+    const d = document.createElement('span');
+    if(i === 0) d.classList.add('active');
+    dots.appendChild(d);
+  });
+  document.getElementById('banner').appendChild(dots);
+
+  goToBanner(0);
+  if(State.banners.length > 1){
+    State.bannerTimer = setInterval(() => goToBanner(State.bannerIndex + 1), 6000);
+  }
+}
+function goToBanner(i){
+  const n = State.banners.length;
+  if(!n) return;
+  State.bannerIndex = ((i % n) + n) % n;
+  document.getElementById('bannerTrack').style.transform = `translateX(-${State.bannerIndex * 100}%)`;
+  document.querySelectorAll('#bannerDots span').forEach((d, idx) => d.classList.toggle('active', idx === State.bannerIndex));
+}
+document.getElementById('bannerPrev').addEventListener('click', () => goToBanner(State.bannerIndex - 1));
+document.getElementById('bannerNext').addEventListener('click', () => goToBanner(State.bannerIndex + 1));
+
+function handleBannerDestination(b){
+  if(b.destinationType === 'app' && b.appId){
+    navigate(`#/app-details?id=${encodeURIComponent(b.appId)}`);
+  } else if(b.destinationType === 'category' && b.categoryId){
+    State.activeCategory = b.categoryId;
+    renderChips(); renderGrid(true);
+    document.getElementById('gridSection')?.scrollIntoView({behavior:'smooth'});
+  } else if(b.externalUrl){
+    window.open(b.externalUrl, '_blank', 'noopener');
+  }
+}
+
+/* ==========================================================================
+   9. APP GRID + INFINITE SCROLL
+   ========================================================================== */
+let observer = null;
+function renderGrid(reset){
+  const grid = document.getElementById('appGrid');
+  const empty = document.getElementById('emptyState');
+  const loadMore = document.getElementById('loadMoreState');
+
+  if(!State.appsLoaded){
+    grid.innerHTML = Array.from({length: 12}).map(() => `<div class="grid-skeleton skeleton-card"></div>`).join('');
+    empty.style.display = 'none';
+    return;
+  }
+
+  const list = filteredApps();
+  document.getElementById('gridCount').textContent = list.length ? `${list.length} tool${list.length===1?'':'s'}` : '';
+
+  if(reset){ grid.innerHTML = ''; State.visibleCount = 0; }
+
+  if(!list.length){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    loadMore.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const nextCount = Math.min(State.visibleCount + CONFIG.PAGE_SIZE, list.length);
+  const slice = list.slice(State.visibleCount, nextCount);
+  slice.forEach(a => grid.appendChild(renderAppCard(a)));
+  State.visibleCount = nextCount;
+
+  loadMore.style.display = State.visibleCount < list.length ? 'flex' : 'none';
+  if(State.visibleCount >= list.length && list.length){
+    loadMore.style.display = 'flex';
+    loadMore.innerHTML = `<span style="color:var(--ink-faint)">You've reached the end — ${list.length} tools total.</span>`;
+  } else {
+    loadMore.innerHTML = `<span class="spinner"></span> Loading more tools…`;
+  }
+
+  setupObserver();
+}
+
+function renderAppCard(a){
+  const card = document.createElement('a');
+  card.href = `#/app-details?id=${encodeURIComponent(a.id)}`;
+  card.className = 'app-card';
+  card.innerHTML = `
+    <div class="thumb"><img src="${escAttr(a.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(a.name || 'App icon')}" loading="lazy" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+    <div class="name">${esc(a.name || 'Untitled tool')}</div>
+    <div class="meta mono">${esc(a.versionName || a.versionCode || '')}</div>
+  `;
+  return card;
+}
+
+function setupObserver(){
+  const sentinel = document.getElementById('sentinel');
+  if(observer) observer.disconnect();
+  observer = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting){
+      const list = filteredApps();
+      if(State.visibleCount < list.length){
+        renderGrid(false);
+      }
+    }
+  }, { rootMargin: '400px' });
+  observer.observe(sentinel);
+}
+
+// ---- Files tab: same grid/infinite-scroll pattern as tools, different data source ----
+let filesObserver = null;
+function renderFilesGrid(reset){
+  const grid = document.getElementById('filesGrid');
+  const empty = document.getElementById('filesEmptyState');
+  const loadMore = document.getElementById('filesLoadMoreState');
+  if(!grid) return;
+
+  if(!State.filesLoaded){
+    grid.innerHTML = Array.from({length: 12}).map(() => `<div class="grid-skeleton skeleton-card"></div>`).join('');
+    empty.style.display = 'none';
+    return;
+  }
+
+  const list = filteredFiles();
+  document.getElementById('filesGridCount').textContent = list.length ? `${list.length} file${list.length===1?'':'s'}` : '';
+
+  if(reset){ grid.innerHTML = ''; State.filesVisibleCount = 0; }
+
+  if(!list.length){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    loadMore.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const nextCount = Math.min(State.filesVisibleCount + CONFIG.PAGE_SIZE, list.length);
+  const slice = list.slice(State.filesVisibleCount, nextCount);
+  slice.forEach(f => grid.appendChild(renderFileCard(f)));
+  State.filesVisibleCount = nextCount;
+
+  loadMore.style.display = State.filesVisibleCount < list.length ? 'flex' : 'none';
+  if(State.filesVisibleCount >= list.length && list.length){
+    loadMore.style.display = 'flex';
+    loadMore.innerHTML = `<span style="color:var(--ink-faint)">You've reached the end — ${list.length} files total.</span>`;
+  } else {
+    loadMore.innerHTML = `<span class="spinner"></span> Loading more files…`;
+  }
+  setupFilesObserver();
+}
+function renderFileCard(f){
+  const card = document.createElement('a');
+  card.href = `#/file-details?id=${encodeURIComponent(f.id)}`;
+  card.className = 'app-card';
+  card.innerHTML = `
+    <div class="thumb"><img src="${escAttr(f.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(f.name || 'File icon')}" loading="lazy" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+    <div class="name">${esc(f.name || 'Untitled file')}</div>
+    <div class="meta mono">${esc(f.versionName || f.versionCode || f.size || '')}</div>
+  `;
+  return card;
+}
+function setupFilesObserver(){
+  const sentinel = document.getElementById('filesSentinel');
+  if(!sentinel) return;
+  if(filesObserver) filesObserver.disconnect();
+  filesObserver = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting){
+      const list = filteredFiles();
+      if(State.filesVisibleCount < list.length) renderFilesGrid(false);
+    }
+  }, { rootMargin: '400px' });
+  filesObserver.observe(sentinel);
+}
+
+// ---- Search tab: combined apps + files ----
+function initSearchPage(){
+  const input = document.getElementById('globalSearchInput');
+  if(!input._wired){
+    input._wired = true;
+    let deb;
+    input.addEventListener('input', () => {
+      clearTimeout(deb);
+      deb = setTimeout(() => { State.searchPageTerm = input.value; renderSearchResults(); }, 220);
+    });
+  }
+  if(State.searchPageTerm) input.value = State.searchPageTerm;
+  renderSearchResults();
+}
+function renderSearchResults(){
+  const grid = document.getElementById('searchGrid');
+  const empty = document.getElementById('searchEmptyState');
+  const title = document.getElementById('searchResultsTitle');
+  const count = document.getElementById('searchResultsCount');
+  const term = State.searchPageTerm.trim();
+
+  if(!term){
+    grid.innerHTML = '';
+    empty.style.display = 'none';
+    title.textContent = 'Start typing to search';
+    count.textContent = '';
+    return;
+  }
+  const results = searchAllItems(term);
+  title.textContent = `Results for "${term}"`;
+  count.textContent = results.length ? `${results.length} result${results.length===1?'':'s'}` : '';
+
+  if(!results.length){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = '';
+  results.forEach(({item, kind}) => grid.appendChild(renderSearchResultCard(item, kind)));
+}
+function renderSearchResultCard(item, kind){
+  const card = document.createElement('a');
+  const isApp = kind === 'app';
+  card.href = isApp ? `#/app-details?id=${encodeURIComponent(item.id)}` : `#/file-details?id=${encodeURIComponent(item.id)}`;
+  card.className = 'app-card';
+  card.innerHTML = `
+    <div class="thumb"><img src="${escAttr(item.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(item.name || '')}" loading="lazy" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+    <div class="name">${esc(item.name || 'Untitled')}</div>
+    <div class="meta mono">${isApp ? 'Tool' : 'File'} · ${esc(item.versionName || item.versionCode || '')}</div>
+  `;
+  return card;
+}
+
+/* ==========================================================================
+   10. SEARCH INPUT WIRING
+   ========================================================================== */
+let searchDebounce = null;
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+searchInput.addEventListener('input', () => {
+  searchClear.classList.toggle('show', !!searchInput.value);
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    State.searchTerm = searchInput.value;
+    State.visibleCount = 0;
+    State.filesVisibleCount = 0;
+    renderGrid(true);
+    renderFilesGrid(true);
+  }, 220);
+});
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchClear.classList.remove('show');
+  State.searchTerm = '';
+  State.visibleCount = 0;
+  State.filesVisibleCount = 0;
+  renderGrid(true);
+  renderFilesGrid(true);
+  searchInput.focus();
+});
+
+/* ==========================================================================
+   11. APP DETAILS PAGE
+   ========================================================================== */
+function renderAppDetails(id){ renderDetailsPage('apps', id); }
+function renderFileDetails(id){ renderDetailsPage('files', id); }
+
+// Shared by the tool-details and file-details pages — identical layout and
+// behaviour, just a different Firebase collection, back-link and item noun.
+function renderDetailsPage(kind, id){
+  const isApp = kind === 'apps';
+  const shell = document.getElementById(isApp ? 'detailsShell' : 'fileDetailsShell');
+  const loaded = isApp ? State.appsLoaded : State.filesLoaded;
+  const item = isApp ? getApp(id) : getFile(id);
+  const noun = isApp ? 'tool' : 'file';
+  const downloadRoute = isApp ? 'app-download' : 'file-download';
+  const homeHash = isApp ? '#/home' : '#/files';
+  const notFoundTitle = isApp ? 'App / Tool Not Found' : 'File Not Found';
+
+  if(!loaded){
+    shell.innerHTML = `<div class="empty-state"><div class="e-title">Loading…</div></div>`;
+    const waitTimer = setInterval(() => {
+      const nowLoaded = isApp ? State.appsLoaded : State.filesLoaded;
+      if(nowLoaded){ clearInterval(waitTimer); renderDetailsPage(kind, id); }
+    }, 200);
+    return;
+  }
+
+  if(!item){
+    shell.innerHTML = `
+      <div class="empty-state">
+        <div class="e-title">${notFoundTitle}</div>
+        <div class="e-sub">It may have been removed or the link is incorrect.</div>
+        <a class="back-link" href="${homeHash}">← Back to ${isApp ? 'Home' : 'Files'}</a>
+      </div>`;
+    return;
+  }
+
+  incrementStat(id, 'clickCount', kind);
+
+  const screenshots = Array.isArray(item.screenshots) ? item.screenshots : Object.values(item.screenshots || {});
+  const permissions = Array.isArray(item.permissions) ? item.permissions : Object.values(item.permissions || {});
+  const categoryNames = resolveCategoryNames(item.categories);
+
+  shell.innerHTML = `
+    <div class="cover-wrap"><img src="${escAttr(item.cover || item.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(item.name)} cover" loading="lazy" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+
+    <div class="identity-row">
+      <div class="identity-logo"><img src="${escAttr(item.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(item.name)} logo" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+      <div class="identity-main">
+        <h1>${esc(item.name || `Untitled ${noun}`)}</h1>
+        <div class="pkg mono">${esc(item.packageName || '')}</div>
+      </div>
+      <a class="btn-download" href="#/${downloadRoute}?id=${encodeURIComponent(id)}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 3v13"/><polyline points="6 11 12 17 18 11"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+        Download
+      </a>
+    </div>
+
+    <div class="stat-blocks">
+      ${statBlock(iconVersion(), item.versionName || item.versionCode || '—', 'Version')}
+      ${statBlock(iconSize(), item.size || '—', 'Size')}
+      ${statBlock(iconStar(), item.rating ? `${item.rating}` : '—', 'Rating')}
+    </div>
+
+    <div class="dl-share-row">
+      <div class="dl-count">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13"/><polyline points="6 11 12 17 18 11"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+        <span><strong id="dlCountVal">${fmtNum(item.downloadCount || 0)}</strong> downloads</span>
+      </div>
+      <button class="share-btn" id="shareBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+        Share
+      </button>
+    </div>
+
+    ${screenshots.length ? `
+    <div class="section-block">
+      <h2>Screenshots</h2>
+      <div class="gallery-grid" id="galleryGrid">
+        ${screenshots.map(s => `<img src="${escAttr(s)}" alt="Screenshot" loading="lazy" onerror="this.style.display='none'">`).join('')}
+      </div>
+    </div>` : ''}
+
+    <div class="section-block">
+      <h2>Technical details</h2>
+      <div class="info-list">
+        <div class="info-item"><div class="i-label">Size</div><div class="i-value">${esc(item.size || '—')}</div></div>
+        <div class="info-item"><div class="i-label">Version</div><div class="i-value">${esc(item.versionName || '—')}</div></div>
+        <div class="info-item"><div class="i-label">Last update</div><div class="i-value">${esc(fmtDate(item.updatedAt))}</div></div>
+        <div class="info-item"><div class="i-label">Requires Android</div><div class="i-value">${esc(item.androidVersion || '—')}</div></div>
+      </div>
+    </div>
+
+    ${item.description ? `
+    <div class="section-block">
+      <h2>Description</h2>
+      <div class="desc-body">${renderDescription(item.description)}</div>
+    </div>` : ''}
+
+    ${permissions.length ? `
+    <div class="section-block">
+      <h2>Permissions</h2>
+      <div class="perm-grid">${permissions.map(p => `<span class="perm-chip">${esc(p)}</span>`).join('')}</div>
+    </div>` : ''}
+
+    <div class="section-block">
+      <h2>Additional information</h2>
+      <div class="addl-row">
+        <div class="addl-pill"><div class="p-label">Category</div><div class="p-value">${esc(categoryNames || '—')}</div></div>
+        <div class="addl-pill"><div class="p-label">Ads</div><div class="p-value">${item.ads ? 'Yes' : 'No'}</div></div>
+        <div class="addl-pill"><div class="p-label">In-app purchases</div><div class="p-value">${item.inAppPurchases ? 'Yes' : 'No'}</div></div>
+      </div>
+    </div>
+
+    ${item.developer && (item.developer.telegram || item.developer.email || item.developer.website) ? `
+    <div class="section-block">
+      <h2>Developer contact</h2>
+      <div class="contact-row">
+        ${item.developer.telegram ? `<a class="contact-chip" href="${escAttr(toTelegram(item.developer.telegram))}" target="_blank" rel="noopener">${iconTelegram()} Telegram</a>` : ''}
+        ${item.developer.email ? `<a class="contact-chip" href="mailto:${escAttr(item.developer.email)}">${iconMail()} Email</a>` : ''}
+        ${item.developer.website ? `<a class="contact-chip" href="${escAttr(item.developer.website)}" target="_blank" rel="noopener">${iconGlobe()} Website</a>` : ''}
+      </div>
+    </div>` : ''}
+
+    ${item.social && Object.values(item.social).some(Boolean) ? `
+    <div class="section-block">
+      <h2>Follow &amp; connect</h2>
+      <div class="social-row">
+        ${item.social.facebook ? `<a class="social-icon" href="${escAttr(item.social.facebook)}" target="_blank" rel="noopener" aria-label="Facebook">${iconFacebook()}</a>` : ''}
+        ${item.social.telegram ? `<a class="social-icon" href="${escAttr(toTelegram(item.social.telegram))}" target="_blank" rel="noopener" aria-label="Telegram">${iconTelegram()}</a>` : ''}
+        ${item.social.youtube ? `<a class="social-icon" href="${escAttr(item.social.youtube)}" target="_blank" rel="noopener" aria-label="YouTube">${iconYoutube()}</a>` : ''}
+        ${item.social.instagram ? `<a class="social-icon" href="${escAttr(item.social.instagram)}" target="_blank" rel="noopener" aria-label="Instagram">${iconInstagram()}</a>` : ''}
+        ${item.social.website ? `<a class="social-icon" href="${escAttr(item.social.website)}" target="_blank" rel="noopener" aria-label="Website">${iconGlobe()}</a>` : ''}
+      </div>
+    </div>` : ''}
+
+    <a class="back-link" href="${homeHash}">← Back to ${isApp ? 'all tools' : 'all files'}</a>
+  `;
+
+  document.getElementById('shareBtn')?.addEventListener('click', () => openShareOverlay(item, id, kind));
+  shell.querySelectorAll('#galleryGrid img').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src));
+  });
+}
+
+function statBlock(icon, value, label){
+  return `<div class="stat-block"><div class="s-icon">${icon}</div><div><div class="s-value">${esc(String(value))}</div><div class="s-label">${label}</div></div></div>`;
+}
+function resolveCategoryNames(cats){
+  if(!cats) return '';
+  const ids = Array.isArray(cats) ? cats : Object.values(cats);
+  return ids.map(id => (State.categories.find(c => c.id === id) || {}).name || id).join(', ');
+}
+function renderDescription(desc){
+  // supports plain text / basic markdown / raw HTML supplied by the admin
+  if(/<[a-z][\s\S]*>/i.test(desc)) return desc; // treat as HTML (admin-authored)
+  const withBreaks = esc(desc)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+  return withBreaks;
+}
+
+/* ==========================================================================
+   12. SHARE SYSTEM
+   ========================================================================== */
+function openShareOverlay(app, id, kind){
+  const url = buildShareUrl(id, kind);
+  document.getElementById('shareUrlInput').value = url;
+  navigator.clipboard?.writeText(url).catch(() => {});
+
+  const platforms = [
+    { name:'Facebook', color:'#1877F2', icon: iconFacebook(), href:`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+    { name:'WhatsApp', color:'#25D366', icon: iconWhatsapp(), href:`https://wa.me/?text=${encodeURIComponent(app.name + ' — ' + url)}` },
+    { name:'Twitter/X', color:'#111', icon: iconX(), href:`https://twitter.com/intent/tweet?text=${encodeURIComponent(app.name)}&url=${encodeURIComponent(url)}` },
+    { name:'Messenger', color:'#00B2FF', icon: iconMessenger(), href:`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=0&redirect_uri=${encodeURIComponent(url)}` }
+  ];
+  document.getElementById('shareGrid').innerHTML = platforms.map(p => `
+    <a class="share-opt" href="${escAttr(p.href)}" target="_blank" rel="noopener">
+      <span class="ic" style="background:${p.color}">${p.icon}</span>${p.name}
+    </a>
+  `).join('');
+
+  document.getElementById('shareOverlay').classList.add('show');
+}
+document.getElementById('shareClose').addEventListener('click', () => document.getElementById('shareOverlay').classList.remove('show'));
+document.getElementById('shareOverlay').addEventListener('click', e => { if(e.target.id === 'shareOverlay') e.currentTarget.classList.remove('show'); });
+document.getElementById('shareCopyBtn').addEventListener('click', () => {
+  const input = document.getElementById('shareUrlInput');
+  input.select();
+  navigator.clipboard?.writeText(input.value).then(() => {
+    const btn = document.getElementById('shareCopyBtn');
+    const old = btn.textContent; btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = old, 1400);
+  }).catch(() => {});
+});
+function buildShareUrl(id, kind){
+  const route = kind === 'files' ? 'file-details' : 'app-details';
+  return `${location.origin}${location.pathname}#/${route}?id=${encodeURIComponent(id)}`;
+}
+
+/* ==========================================================================
+   13. LIGHTBOX
+   ========================================================================== */
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', e => { if(e.target.id === 'lightbox') closeLightbox(); });
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('show'); }
+
+/* ==========================================================================
+   14. DOWNLOAD SYSTEM (app-download page + 20s countdown)
+   ========================================================================== */
+function renderDownloadPage(id){ renderDownloadPageFor('apps', id); }
+function renderFileDownloadPage(id){ renderDownloadPageFor('files', id); }
+
+// Shared by app-download and file-download — identical 20s countdown flow.
+function renderDownloadPageFor(kind, id){
+  const isApp = kind === 'apps';
+  const shell = document.getElementById(isApp ? 'downloadShell' : 'fileDownloadShell');
+  const loaded = isApp ? State.appsLoaded : State.filesLoaded;
+  const item = isApp ? getApp(id) : getFile(id);
+  const detailsRoute = isApp ? 'app-details' : 'file-details';
+  const homeHash = isApp ? '#/home' : '#/files';
+
+  if(!loaded){
+    shell.innerHTML = `<div class="empty-state"><div class="e-title">Loading…</div></div>`;
+    const waitTimer = setInterval(() => {
+      const nowLoaded = isApp ? State.appsLoaded : State.filesLoaded;
+      if(nowLoaded){ clearInterval(waitTimer); renderDownloadPageFor(kind, id); }
+    }, 200);
+    return;
+  }
+  if(!item){
+    shell.innerHTML = `
+      <div class="empty-state">
+        <div class="e-title">${isApp ? 'App / Tool Not Found' : 'File Not Found'}</div>
+        <a class="back-link" href="${homeHash}">← Back to ${isApp ? 'Home' : 'Files'}</a>
+      </div>`;
+    return;
+  }
+
+  const shortDesc = (item.description || '').replace(/<[^>]+>/g,'').slice(0, 140);
+
+  shell.innerHTML = `
+    <div class="d-icon"><img src="${escAttr(item.logo || CONFIG.PLACEHOLDER_IMG)}" alt="${escAttr(item.name)}" onerror="this.src='${CONFIG.PLACEHOLDER_IMG}'"></div>
+    <h1>${esc(item.name || 'Untitled')}</h1>
+    <div class="d-version mono">${esc(item.versionName || item.versionCode || '')}</div>
+    ${shortDesc ? `<div class="d-desc">${esc(shortDesc)}${shortDesc.length >= 140 ? '…' : ''}</div>` : ''}
+
+    <div class="countdown-wrap">
+      <div class="countdown-ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="track" cx="60" cy="60" r="52"/>
+          <circle class="fill" id="ringFill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="0"/>
+        </svg>
+        <div class="countdown-num" id="countdownNum">${CONFIG.COUNTDOWN_SECONDS}</div>
+      </div>
+      <div class="countdown-label" id="countdownLabel">Preparing your download link…</div>
+    </div>
+
+    <button class="btn-download-final" id="finalDownloadBtn" disabled>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 3v13"/><polyline points="6 11 12 17 18 11"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+      Download
+    </button>
+    <a class="dl-back" href="#/${detailsRoute}?id=${encodeURIComponent(id)}">← Back to details</a>
+  `;
+
+  startCountdown(item, id, kind);
+}
+
+function startCountdown(app, id, kind){
+  stopCountdown();
+  const total = CONFIG.COUNTDOWN_SECONDS;
+  const CIRC = 2 * Math.PI * 52;
+  let remaining = total;
+  const numEl = document.getElementById('countdownNum');
+  const fillEl = document.getElementById('ringFill');
+  const labelEl = document.getElementById('countdownLabel');
+  const btn = document.getElementById('finalDownloadBtn');
+  fillEl.setAttribute('stroke-dasharray', CIRC);
+
+  function tick(){
+    numEl.textContent = remaining;
+    fillEl.style.strokeDashoffset = CIRC * (1 - remaining / total);
+    if(remaining <= 0){
+      clearInterval(State.countdownTimer);
+      numEl.textContent = '0';
+      labelEl.textContent = 'Your download link is ready.';
+      btn.classList.add('ready');
+      btn.disabled = false;
+      btn.addEventListener('click', () => {
+        incrementStat(id, 'downloadCount', kind);
+        if(app.downloadLink){
+          window.open(app.downloadLink, '_blank', 'noopener');
+        }
+      }, { once:true });
+    } else {
+      remaining -= 1;
+    }
+  }
+  tick();
+  State.countdownTimer = setInterval(tick, 1000);
+}
+function stopCountdown(){
+  clearInterval(State.countdownTimer);
+  State.countdownTimer = null;
+}
+
+/* ==========================================================================
+   15. SEO HELPERS
+   ========================================================================== */
+function updateSEO(){
+  const { path, id } = parseHash();
+  const canonical = document.getElementById('canonicalLink');
+  const base = `${location.origin}${location.pathname}`;
+
+  if(path === 'app-details' && id){
+    const app = getApp(id);
+    if(app){
+      document.title = `${app.name} — Modder Tools`;
+      setMeta('description', (app.seoDescription || app.description || '').replace(/<[^>]+>/g,'').slice(0,160));
+      canonical.href = `${base}#/app-details?id=${encodeURIComponent(id)}`;
+      document.getElementById('ldjson').textContent = JSON.stringify({
+        "@context":"https://schema.org", "@type":"SoftwareApplication",
+        "name": app.name, "applicationCategory": resolveCategoryNames(app.categories) || 'UtilitiesApplication',
+        "operatingSystem":"Android", "softwareVersion": app.versionName || app.versionCode || undefined,
+        "aggregateRating": app.rating ? { "@type":"AggregateRating", "ratingValue": app.rating, "ratingCount": app.downloadCount || 1 } : undefined
+      });
+      return;
+    }
+  }
+  document.title = 'Modder Tools — Find the tools you need';
+  setMeta('description', 'A centralized directory of apps and tools for Android modders: APK editors, reverse-engineering utilities, resource editors and more.');
+  canonical.href = base;
+  document.getElementById('ldjson').textContent = JSON.stringify({
+    "@context":"https://schema.org", "@type":"WebSite", "name":"Modder Tools", "url": base
+  });
+}
+function setMeta(name, content){
+  let el = document.querySelector(`meta[name="${name}"]`);
+  if(!el){ el = document.createElement('meta'); el.name = name; document.head.appendChild(el); }
+  el.content = content || '';
+}
+
+/* ==========================================================================
+   16. UI / ICON HELPERS
+   ========================================================================== */
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escAttr(s){ return esc(s); }
+function fmtNum(n){ n = Number(n) || 0; return n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n); }
+function fmtDate(ts){ if(!ts) return '—'; try{ return new Date(ts).toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'}); }catch(e){ return '—'; } }
+function toTelegram(v){ return v.startsWith('http') ? v : `https://t.me/${v.replace(/^@/,'')}`; }
+
+function iconVersion(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`; }
+function iconSize(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M16 3v18"/></svg>`; }
+function iconStar(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 17.8 5.5 21.5 7 14.5 2 9.5 9 9"/></svg>`; }
+function iconTelegram(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 20c-.2 1-.9 1.2-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9L18 7.5c.4-.4-.1-.6-.6-.2L7.1 13.5l-4.7-1.5c-1-.3-1-1 .2-1.5L20.5 3.3c.8-.3 1.6.2 1.4 1z"/></svg>`; }
+function iconMail(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>`; }
+function iconGlobe(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6-4-9s1.5-6.3 4-9z"/></svg>`; }
+function iconFacebook(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg>`; }
+function iconYoutube(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5A3 3 0 0 0 3.5 19c1.6.5 8.5.5 8.5.5s6.9 0 8.5-.4a3 3 0 0 0 2.1-2.1c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>`; }
+function iconInstagram(){ return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>`; }
+function iconWhatsapp(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.2.2-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.3v-.3l-.7-1.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3a2.6 2.6 0 0 0-.8 1.9c0 1.1.8 2.2.9 2.4.1.2 1.6 2.5 4 3.5.5.2 1 .4 1.3.5.6.2 1.1.1 1.5 0 .5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3z"/></svg>`; }
+function iconX(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.4 8.5L23.3 22H16l-5-6.6L4.9 22H2l7.9-9L1.7 2h7.5l4.6 6zM17.6 20h1.7L7.3 4H5.5z"/></svg>`; }
+function iconMessenger(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.2 2 11.4c0 2.9 1.4 5.5 3.6 7.2v3.4l3.3-1.8c.9.3 1.9.4 2.9.4 5.5 0 10-4.2 10-9.4C22 6.2 17.5 2 12 2zm1 12.6-2.6-2.7-5 2.7 5.5-5.9 2.6 2.7 5-2.7-5.5 5.9z"/></svg>`; }
+
+/* ==========================================================================
+   17. INIT
+   ========================================================================== */
+document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('canonicalLink').href = location.href;
+
+// Detect the native Android shell (MainActivity appends this to the WebView
+// user-agent) and add bottom clearance for its floating glass nav bar.
+// Normal website visitors never match this and are completely unaffected.
+if(/ModderToolsApp/.test(navigator.userAgent)){
+  document.body.classList.add('in-app');
+}
+
+loadCategories();
+loadBanners();
+loadApps();
+loadFiles();
+renderGrid();
+renderFilesGrid();
+renderFilesChips();
+renderRoute();
+
+if(!firebaseReady){
+  console.warn('Modder Tools: Firebase is not configured yet. Replace firebaseConfig with your project credentials.');
+}
+</script>
+</body>
+</html>
